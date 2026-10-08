@@ -33,6 +33,18 @@ public class AccountListDao implements AccountDao {
     }
 
     @Override
+    public List<Account> findByMemberId(String memberId) {
+        List<Account> accounts = new ArrayList<>();
+
+        for (Account a : accountDB) {
+            if (a.getMemberId().equals(memberId)) {
+                accounts.add(a);
+            }
+        }
+        return accounts;
+    }
+
+    @Override
     public boolean update(Account a) {
         if (a == null) return false;
 
