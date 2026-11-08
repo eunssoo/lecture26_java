@@ -38,8 +38,11 @@ public class MemberListDao implements MemberDao {
 	public boolean update(Member m) {
 		Member target = findById(m.getId());
 		if (m == null) return false;
-		memberDB.remove(target);
-		memberDB.add(m);
+//		memberDB.remove(target);
+//		memberDB.add(m);
+
+		int index = memberDB.indexOf(target);
+		memberDB.set(index, m);
 		return true;
 	}
 
