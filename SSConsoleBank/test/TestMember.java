@@ -11,13 +11,9 @@ import bank.member.MemberService;
 import bank.member.SSMemberService;
 
 public class TestMember {
+
 	public static void main(String[] args) {
-		if (args.length > 0 && "oracle".equals(args[0])) {
-			testMemberOracleDao();
-			return;
-		}
-//		testMemberDao();
-		testMemberService();
+		testMemberDao();
 	}
 
 	public static void testMemberOracleDao() {
@@ -72,7 +68,7 @@ public class TestMember {
 	}
 
 	public static void testMemberService() {
-	    MemberService ms = new SSMemberService(new MemberListDao());
+		MemberService ms = new SSMemberService(new MemberOracleDao());
 	    System.out.println(">> 회원가입 및 목록조회");
 	    ms.join("curi", "1234", "큐리");
 	    ms.join("curi", "1111", "큐리2");
@@ -94,12 +90,24 @@ public class TestMember {
 	
 	
 	public static void testMemberDao() {
-		MemberDao mdao = new MemberListDao();
+		MemberDao mdao = new MemberOracleDao();
 		// 회원 추가
 		System.out.println(">>> 회원추가");
-		mdao.save(new Member("ADMIN", "1234", "ADMIN", null, null, Member.ADMIN));
-		mdao.save(new Member("sungsoo", "1111", "은성수", null, null, Member.USER));
-		mdao.save(new Member("jisoo", "1111", "지수", null, null, Member.USER));
+
+		if (mdao.findById("ADMIN") == null) {
+			mdao.save(new Member(
+					"ADMIN", "1234", "ADMIN", null, null, Member.ADMIN));
+		}
+
+		if (mdao.findById("sungsoo") == null) {
+			mdao.save(new Member(
+					"sungsoo", "1111", "은성수", null, null, Member.USER));
+		}
+
+		if (mdao.findById("jisoo") == null) {
+			mdao.save(new Member(
+					"jisoo", "1111", "지수", null, null, Member.USER));
+		}
 		// 회원 모두 찾기
 		System.out.println(">>> 회원목록");
 		List<Member> mlist = mdao.findAll();
@@ -112,9 +120,11 @@ public class TestMember {
 		System.out.println(">>> 비밀번호 변경");
 		m.setPassword("1234");
 		mdao.update(m);
-		// 회원 출력
+
+		// 수정된 DB 내용을 다시 조회해서 출력
+		mlist = mdao.findAll();
 		printMemberList(mlist);
-		
+
 		m = mdao.findById("jisoo");
 		mdao.delete(mdao.findById("jisoo"));
 	}
