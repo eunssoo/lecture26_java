@@ -14,12 +14,15 @@ public class AdminMenu extends ConsoleMenu {
     @Override
     public void run() {
         System.out.println("::: 관리자 메뉴 :::");
+
         while (true) {
             int menu = selectMenu();
+
             switch (menu) {
             case 1 -> new AdminMemberMenu(as, ms).run();
             case 2 -> new AdminAccountMenu(as, ms).run();
             case 0 -> {logout(); return;}
+            case -1 -> System.out.println("숫자를 입력해주세요.");
             default -> System.out.println("!! 메뉴에 있는 번호 선택 !!");
             }
         }
